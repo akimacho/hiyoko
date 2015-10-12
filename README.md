@@ -1,11 +1,11 @@
 hiyoko
 ====
 
-## Description
+# Description
 
 command line application to create xcode project from [Swift Docs](https://sites.google.com/a/gclue.jp/swift-docs/), great sample code Collection
 
-## Requirement
+# Requirement
 
 on Mac OSX operationg system
 
@@ -16,7 +16,7 @@ following Ruby Gems:
 * thor
 * activerecord
 
-## Install
+# Install
 
 ```
 $ git clone https://github.com/akimacho/hiyoko.git
@@ -24,9 +24,9 @@ $ cd hiyoko
 $ [sudo] bundle exec rake install
 ```
 
-## Usage
+# Usage
 
-help
+## help
 
 ```
 $ hiyoko help
@@ -36,6 +36,8 @@ Commands:
   hiyoko prepare         # setup lessons
   hiyoko progress        # show your progress
 ```
+
+## show how to command
 
 ```
 $ hiyoko help generate
@@ -49,16 +51,16 @@ Options:
 setup xcode project
 ```
 
-init hiyoko
+## init hiyoko
 
 ```
 $ hiyoko prepare
 All set. Let's fly!
 ```
 
-generate project from [Swift Docs](https://sites.google.com/a/gclue.jp/swift-docs/ni-yinki100-ios)
+## generate project from [Swift Docs](https://sites.google.com/a/gclue.jp/swift-docs/ni-yinki100-ios)
 
-select url
+### select url
 
 ```
 $ hiyoko generate --url="https://sites.google.com/a/gclue.jp/swift-docs/ni-yinki100-ios/uikit/003-uibuttondeiroironabotanwo-biao-shi"
@@ -77,12 +79,11 @@ create 01-003.xcodeproj directory
 Complete!
 ```
 
-select [chap-number]-[topic_number]
+### select [chap-number]-[topic_number]
 
 For example, [07. MapKit 002 地図の縮尺の変更](https://sites.google.com/a/gclue.jp/swift-docs/ni-yinki100-ios/7-mapkit) is 07-002.
 
 ```
-$ hiyoko generate --target="07-002"
 $ hiyoko generate --target="07-002"
 create 07-002 directory
 create 07-002.xcodeproj directory
@@ -99,7 +100,17 @@ create 07-002.xcodeproj directory
 Complete!
 ```
 
-show progress
+### replace println with print
+
+option `--swift2` add generate command
+
+```
+$hiyoko generate --target="21-097" --swift2
+```
+
+## show progress
+
+show your progress
 
 ```
 $ hiyoko progress
@@ -109,6 +120,8 @@ $ hiyoko progress
 [ ] | 01. UIKit | 004. UITextFieldで文字を入力 |
 ...
 ```
+
+show your progress selected chapter
 
 ```
 $ hiyoko progress --chap="AVFoundation"
@@ -122,7 +135,16 @@ $ hiyoko progress --chap="AVFoundation"
 [ ] | 03. AVFoundation | 008. QRCodeリーダー |
 ```
 
-## Author
+### progress percentage
+
+show your progress as percentage
+
+```
+$ hiyoko progress --shincyoku
+your progress: 1.0 %
+```
+
+# Author
 
 [akimacho](https://github.com/akimacho)
 

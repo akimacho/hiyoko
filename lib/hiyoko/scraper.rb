@@ -4,8 +4,12 @@ require 'open-uri'
 require 'nokogiri'
 require 'kconv'
 require 'pp'
+require 'hiyoko/swift'
 
 class Scraper
+  
+  include Swift
+  
   def initialize(url)
     @url = url
   end
@@ -126,6 +130,68 @@ class Scraper
         code.css('p').each do |line|
           text      = line.text.toutf8 + "\n"
           tmp_code += text.gsub(/ /, ' ') # temporary deal of error by the invisible character ' '
+        end
+        contents << tmp_code
+    end
+    
+    # generate Hash from twi arrays
+    @codes = Hash[*filenames.zip(contents).flatten]
+  end
+  
+  def scrapeTitle(url)
+    # retrieve html contents
+    begin 
+      html_entry = open(url)
+    rescue 
+      puts "error in open-uri ... retry"
+      exit
+    end
+    doc = Nokogiri::HTML(html_entry, nil, "UTF-8")
+    
+    chap_number = ''
+    doc.css('div#title-crumbs > a').each do |node|
+      if /(\d{2,2})\..*/ =~ node.text then
+        chap_number = $1
+      end
+    end
+    topic_number = ''
+    doc.css('span#sites-page-title').each do |node|
+      if /(\d{3,3})/ =~ node.text then
+        topic_number = $1
+      end
+    end
+    @title = chap_number + '-' + topic_number
+    return @title
+  end
+  
+  # scrape code
+  def scrapeCodeForSwift2(url)
+    # retrieve html contents
+    begin 
+      html_entry = open(url)
+    rescue 
+      puts "error in open-uri ... retry"
+      exit
+    end
+    
+    doc = Nokogiri::HTML(html_entry, nil, "UTF-8")
+    @codes = []
+    # scraping some h3 
+    filenames = []
+    doc.css('h3').each do |header|
+      if /.*\.(swift|php)/ =~ header.text then
+        filenames << header.text
+      end
+    end
+    
+    # scraping contents
+    contents = []
+    doc.css('div.sites-codeblock').each do |code|
+        tmp_code = ''
+        code.css('p').each do |line|
+          text      = line.text.toutf8 + "\n"
+          tmp_line  = text.gsub(/ /, ' ') # temporary deal of error by the invisible character ' '
+          tmp_code += replace(tmp_line)
         end
         contents << tmp_code
     end
